@@ -47,7 +47,7 @@ type ID = string | number;
 type Coordinate = [number, number];
 ```
 
-2. The keyof Keyword <a name="the-keyof-keyword"></a>
+## 2. The keyof Keyword <a name="the-keyof-keyword"></a>
 Your Type-Safe Key Accessor 🔑
 
 What It Does:
