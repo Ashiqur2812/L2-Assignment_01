@@ -5,8 +5,10 @@ function formatString(input: string, toUpper?: boolean): string {
         return input.toUpperCase();
     }
 }
-console.log(formatString('hello', false));
-console.log(formatString('hello', true));
+
+formatString("Hello");          
+formatString("Hello", true); 
+formatString("Hello", false);
 
 
 function filterByRating(items: { title: string; rating: number; }[]): { title: string; rating: number; }[] {
@@ -20,15 +22,15 @@ const books = [
     { title: "Book C", rating: 5.0 }
 ];
 
-console.log(filterByRating(books));
+filterByRating(books)
 
 
 function concatenateArrays<T>(...arrays: T[][]): T[] {
     return Array.prototype.concat(...arrays);
 }
 
-console.log(concatenateArrays(["a", "b"], ["c"]));
-console.log(concatenateArrays([1, 2], [3, 4], [5]));
+concatenateArrays(["a", "b"], ["c"])
+concatenateArrays([1, 2], [3, 4], [5])
 
 
 class Vehicle {
@@ -69,8 +71,8 @@ function processValue(value: string | number): number {
         return value * 2;
     }
 }
-console.log(processValue("hello"));
-console.log(processValue(10));
+processValue("hello")
+processValue(10)
 
 
 
@@ -90,7 +92,7 @@ const products = [
     { name: "Bag", price: 50 }
 ];
 
-console.log(getMostExpensiveProduct(products));
+getMostExpensiveProduct(products)
 
 
 enum Day {
@@ -116,11 +118,8 @@ function getDayType(day: Day): string {
 }
 
 
-console.log(getDayType(Day.Monday));   // Output: "Weekday"
-console.log(getDayType(Day.Sunday));   // Output: "Weekend"
-console.log(getDayType(Day.Saturday));   // Output: "Weekday"
-console.log(getDayType(Day.Wednesday));   // Output: "Weekday"
-
+getDayType(Day.Monday) 
+getDayType(Day.Sunday)  
 
 async function squareAsync(n: number): Promise<number> {
     return new Promise((resolve, reject) => {
@@ -134,6 +133,6 @@ async function squareAsync(n: number): Promise<number> {
     });
 }
 
-squareAsync(4).then(console.log);       // Output after 1s: 16
-squareAsync(-3).catch(console.error);    // Output: Error: Negative number not allowed
+squareAsync(4).then(console.log);       
+squareAsync(-3).catch(console.error);    
 
