@@ -75,5 +75,5 @@ getProductValue({id: 1, name: "Chair", price: 49}, "name");
 //  Error: "discount" isn't a valid key
 getProductValue({id: 2, name: "Desk", price: 199}, "discount");
 ```
-Autocomplete Bonus:
-IDEs provide suggestions for valid keys!
+## Conclusion
+The keyof keyword in TypeScript helps you work with object keys in a type-safe way, making your code more reliable and easier to maintain. It ensures that you can only access valid keys from an object, preventing runtime errors.
