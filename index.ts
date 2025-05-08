@@ -75,19 +75,48 @@ console.log(processValue(10));
 
 
 interface Product {
-        name: string;
-        price: number;
+    name: string;
+    price: number;
+}
+
+function getMostExpensiveProduct(products: Product[]): Product | null {
+    return products.reduce((previous, current) => current.price > previous.price ? current : previous, products[0]);
+}
+
+const products = [
+    { name: "Pen", price: 10 },
+    { name: "Notebook", price: 25 },
+    { name: "Bag", price: 50 }
+];
+
+console.log(getMostExpensiveProduct(products));
+
+
+enum Day {
+    Monday,
+    Tuesday,
+    Wednesday,
+    Thursday,
+    Friday,
+    Saturday,
+    Sunday
+}
+
+function getDayType(day: Day): string {
+    if (day === Day.Monday ||
+        day === Day.Tuesday ||
+        day === Day.Wednesday ||
+        day == Day.Thursday ||
+        day === Day.Friday ||
+        day === Day.Saturday) {
+        return 'Weekday';
+    } else {
+        return 'Weekend';
     }
+}
 
-    function getMostExpensiveProduct(products: Product[]): Product | null {
-        return products.reduce((previous, current) => current.price > previous.price ? current : previous, products[0]);
-    }
 
-    const products = [
-        { name: "Pen", price: 10 },
-        { name: "Notebook", price: 25 },
-        { name: "Bag", price: 50 }
-    ];
-
-    console.log(getMostExpensiveProduct(products));
+console.log(getDayType(Day.Monday));   // Output: "Weekday"
+console.log(getDayType(Day.Sunday));   // Output: "Weekend"
+console.log(getDayType(Day.Saturday));   // Output: "Weekday"
 
