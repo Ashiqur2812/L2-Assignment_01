@@ -1,8 +1,8 @@
 # TypeScript Essentials Guide 🚀
 
 ## Table of Contents
-1. [Interfaces vs Types](#interfaces-vs-types)
-2. [The `keyof` Keyword](#the-keyof-keyword)
+1. [Interfaces vs Types]
+2. [The `keyof` Keyword]
 
 ---
 
@@ -47,7 +47,7 @@ type ID = string | number;
 type Coordinate = [number, number];
 ```
 
-The keyof Keyword <a name="the-keyof-keyword"></a>
+2. The keyof Keyword <a name="the-keyof-keyword"></a>
 Your Type-Safe Key Accessor 🔑
 
 What It Does:
