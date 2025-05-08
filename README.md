@@ -17,8 +17,8 @@
 |------------------------|------------------------------------|-------------------------------|
 | **Best For**           | Object shapes & class contracts    | Unions, tuples, complex types |
 | **Extending**          | `extends` keyword                  | `&` intersection              |
-| **Declaration Merging**| ✅ Multiple declarations merge     | ❌ Single declaration only    |
-| **Primitive Types**    | ❌                                 | ✅ Works with strings/numbers |
+| **Declaration Merging**|  Multiple declarations merge     |  Single declaration only    |
+| **Primitive Types**    | Not work                                 |  Works with strings/numbers |
 
 ### When Would I Use Which? 🤔
 
@@ -34,6 +34,7 @@ interface User {
 interface AdminUser extends User {
   permissions: string[];
 }
+```
 
 Choose Type When:
 
@@ -41,16 +42,17 @@ Choose Type When:
 
     Working with non-object data
 
-
+```
 type ID = string | number;
 type Coordinate = [number, number];
+```
 
 The keyof Keyword <a name="the-keyof-keyword"></a>
 Your Type-Safe Key Accessor 🔑
 
 What It Does:
 Creates a union type of an object's keys.
-
+```
 interface Product {
   id: number;
   name: string;
@@ -58,11 +60,11 @@ interface Product {
 }
 
 type ProductKeys = keyof Product; // "id" | "name" | "price"
-
+```
 Real-World Usage 💼
 
 Dynamic Property Access:
-
+```
 function getProductValue(product: Product, key: keyof Product) {
   return product[key]; // Type-safe access!
 }
@@ -72,6 +74,6 @@ getProductValue({id: 1, name: "Chair", price: 49}, "name");
 
 //  Error: "discount" isn't a valid key
 getProductValue({id: 2, name: "Desk", price: 199}, "discount");
-
+```
 Autocomplete Bonus:
 IDEs provide suggestions for valid keys!
