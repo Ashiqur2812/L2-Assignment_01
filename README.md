@@ -64,7 +64,7 @@ type ApiResult<T> =
     </tr>
     <tr>
       <td>Primitive Unions</td>
-      <td></td>
+      <td>N/A</td>
       <td>Native support</td>
     </tr>
     <tr>
