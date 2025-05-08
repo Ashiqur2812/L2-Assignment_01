@@ -29,14 +29,15 @@ interface SignedEdition extends Book {
 }
 
 Types handle complex data combinations:
-```
-// Track inventory changes
+
+```// Track inventory changes
 type StockAlert = {
   totalCopies: number;
   lowStockTitles: string[];
 };
+```
 
-// Handle different API outcomes
+```// Handle different API outcomes
 type ApiResult<T> = 
   | { status: 'ok'; data: T }
   | { status: 'fail'; error: string };
