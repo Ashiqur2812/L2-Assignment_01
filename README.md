@@ -1,177 +1,159 @@
-# TypeScript Essentials: Writing Safer, Cleaner Code
+1. What are some differences between interfaces and types in TypeScript?
 
-## Introduction  
-TypeScript brings clarity to JavaScript by adding clear type rules. Let's break down three key concepts that help teams build reliable systems, using practical examples you'll encounter in everyday development.
+In TypeScript, both interface and type are powerful tools used to define the shape of data. Although they often serve similar purposes and can sometimes be used interchangeably, there are important distinctions between them that can influence which one you should use in different scenarios.
 
----
+1. Extending and Combining Types
+Interfaces use the extends keyword to support inheritance. This is especially useful when working with object-oriented patterns or designing class contracts.
 
-## 1. Interfaces vs. Types: Your Code's Blueprint
-
-### Real-World Use: Building a Bookstore API
-
-**Interfaces** work best when defining clear object structures:
-```typescript
-// Define book structure
-interface Book {
-  isbn: string;
-  title: string;
-  price: number;
-  stock: {
-    mainStore: number;
-    warehouse: number;
-  };
+```
+interface Agent {
+  name: string;
+  age: number;
 }
 
-// Extend for special editions
-interface SignedEdition extends Book {
-  authorSignature: boolean;
-  certificationCode: string;
+interface Admin extends Agent {
+  role: string;
 }
+```
+Types, on the other hand, use intersection types (&) to combine existing types. This approach is more flexible when composing complex types or working with non-object structures.
 
-Types handle complex data combinations:
+```
+type Agent = {
+  name: string;
+  age: number;
+};
 
-```// Track inventory changes
-type StockAlert = {
-  totalCopies: number;
-  lowStockTitles: string[];
+type Admin = Agent & {
+  role: string;
 };
 ```
+2. Declaration Merging
+A unique feature of interface is declaration merging. You can declare an interface multiple times, and TypeScript will automatically merge the definitions:
 
-```// Handle different API outcomes
-type ApiResult<T> = 
-  | { status: 'ok'; data: T }
-  | { status: 'fail'; error: string };
 ```
+interface User {
+  name: string;
+}
+
+interface User {
+  age: number;
+}
+
+// Result: { name: string; age: number }
+```
+
+In contrast, type does not support merging. Declaring the same type alias more than once results in a compilation error:
+
+```
+type User = {
+  name: string;
+};
+
+type User = {
+  age: number;
+}; // Error: Duplicate identifier 'User'
+```
+
+Use Case
 
 <table border="1" cellpadding="8" cellspacing="0">
   <thead>
     <tr>
       <th>Feature</th>
-      <th>Interface</th>
-      <th>Type</th>
+      <th>interface</th>
+      <th>type</th>
     </tr>
   </thead>
   <tbody>
     <tr>
-      <td>Declaration Merging</td>
-      <td>Multiple declarations merge</td>
-      <td>Single declaration only</td>
+      <td>Object structure</td>
+      <td>Best suited</td>
+      <td>Also valid</td>
     </tr>
     <tr>
-      <td>Extensibility</td>
-      <td>Built-in extends syntax</td>
-      <td>Requires intersection (&)</td>
+      <td>Class implementation</td>
+      <td>Ideal for class contracts</td>
+      <td>Not used with <code>implements</code></td>
     </tr>
     <tr>
-      <td>Primitive Unions</td>
-      <td>N/A</td>
+      <td>Primitive types</td>
+      <td>Not supported</td>
+      <td>Works with strings, numbers, etc.</td>
+    </tr>
+    <tr>
+      <td>Unions & Tuples</td>
+      <td>Workarounds needed</td>
       <td>Native support</td>
     </tr>
     <tr>
-      <td>Tuple Types</td>
-      <td><code>interface A { [index]: type }</code></td>
-      <td>Direct syntax</td>
+      <td>Declaration merging</td>
+      <td>Supported</td>
+      <td>Not supported</td>
+    </tr>
+    <tr>
+      <td>Extensibility</td>
+      <td>Via <code>extends</code></td>
+      <td>Via <code>&</code> (intersection types)</td>
     </tr>
   </tbody>
 </table>
 
-2. Understanding Type Safety: any, unknown, never
-Real-World Use: Handling User Input
+4. When to Use interface vs type
+There’s no strict rule, but some general guidance includes:
 
-any - Use sparingly for quick fixes:
+Use interface when:
+
+Defining object shapes or class contracts
+
+You want to allow declaration merging or plan to extend it later
+
+Working in large codebases where extension and maintenance are key
+
+Use type when:
+
+Defining unions, intersections, or tuples
+
+Creating advanced or flexible types that go beyond just object shapes
+
+Working with primitive types or creating mapped/conditional types
+
+2. What is the use of the keyof keyword in TypeScript? Provide an example.
+If you're new to TypeScript, you might have come across the keyof keyword and wondered what it does. Let me explain it to you in simple terms.
+
+What is keyof?
+In TypeScript, keyof is used to get the type of the keys of an object. It returns a union type of all the keys in a given type, making your code safer and more flexible.
+
+How Does keyof Work?
+Let’s say you have an interface Person:
 
 ```
-// Temporary solution for old code
-const legacyInput = (userData: any) => {
-  saveToDatabase(userData.email); // Risky but sometimes necessary
-};
-```
-unknown - Safe approach for external data:
-
-```
-// Process form submissions safely
-async function handleForm(rawData: unknown) {
-  if (isValidForm(rawData)) { // Custom validation check
-    sendWelcomeEmail(rawData.email); // Now type-safe
-  }
-}
-
-// Validation helper
-function isValidForm(data: unknown): data is { email: string } {
-  return !!data && typeof data === 'object' && 'email' in data;
-}
-```
-
-never - Prevent impossible states:
-
-````
-// Handle all possible loading states
-function handleLoad(state: 'success' | 'error'): never {
-  switch(state) {
-    case 'success': showContent(); break;
-    case 'error': showError(); break;
-    default: 
-      const check: never = state; // Catches missing cases
-      throw Error(`Unexpected state: ${check}`);
-  }
+interface Person {
+  name: string;
+  age: number;
 }
 ```
 
-3. Combining Types: Build Flexible Systems
-Real-World Use: User Management System
-
-Union Types (|) handle different user types:
 ```
-type User = 
-  | { role: 'admin'; permissions: string[] }
-  | { role: 'member'; joinDate: Date }
-  | { role: 'guest'; sessionId: string };
-
-function showDashboard(user: User) {
-  if (user.role === 'admin') {
-    displayAdminTools(user.permissions); // Type-safe access
-  }
-}
+type PersonKeys = keyof Person; // "name" | "age"
+In this case, keyof Person will give you a union type of the keys—"name" and "age".
 ```
+Real-World Example: Dynamic Key Access
+You can use keyof to create functions that dynamically access object properties, ensuring type safety:
 
-Intersection Types (&) combine features:
 ```
-interface Account {
-  username: string;
-  email: string;
+interface Product {
+  id: number;
+  name: string;
 }
 
-interface Preferences {
-  theme: 'light' | 'dark';
-  notifications: boolean;
+function getProperty<T>(obj: T, key: keyof T) {
+  return obj[key];
 }
 
-type CompleteProfile = Account & Preferences;
-
-const userProfile: CompleteProfile = {
-  username: 'booklover123',
-  email: 'reader@bookstore.com',
-  theme: 'dark',
-  notifications: true
-};
+const product = { id: 1, name: "Laptop" };
+console.log(getProperty(product, "name")); // Output: "Laptop"
 ```
+Here, the key parameter is guaranteed to be a valid key of Product, so you can't accidentally pass an invalid property.
 
-Putting It All Together: Real Benefits
-
-    Clear Communication
-    Interfaces act like instruction manuals for your data structures
-
-    Safety Nets
-    The any → unknown → never spectrum helps balance flexibility and safety
-
-    Adaptable Systems
-    Union/intersection types model real-world complexity simply
-
-Try This Challenge
-Create a support ticket system that handles:
-```
-type Ticket = 
-  | { status: 'open'; priority: 'high' | 'normal' }
-  | { status: 'closed'; resolution: string }
-  | { status: 'pending'; assignedTo: string };
-  ```
+Conclusion
+The keyof keyword in TypeScript helps you work with object keys in a type-safe way, making your code more reliable and easier to maintain. It ensures that you can only access valid keys from an object, preventing runtime errors.
