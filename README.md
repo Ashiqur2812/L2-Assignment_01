@@ -1,161 +1,77 @@
-### Blog Post
+# TypeScript Essentials Guide 🚀
 
-## 1. What are some differences between interfaces and types in TypeScript?
+## Table of Contents
+1. [Interfaces vs Types](#interfaces-vs-types)
+2. [The `keyof` Keyword](#the-keyof-keyword)
 
-In TypeScript, both interface and type are powerful tools used to define the shape of data. Although they often serve similar purposes and can sometimes be used interchangeably, there are important distinctions between them that can influence which one you should use in different scenarios.
+---
 
-1. Extending and Combining Types
-Interfaces use the extends keyword to support inheritance. This is especially useful when working with object-oriented patterns or designing class contracts.
+## Interfaces vs Types <a name="interfaces-vs-types"></a>
 
-```
-interface Agent {
-  name: string;
-  age: number;
-}
+### Two Ways to Define Shapes 🔷
+**Interfaces** and **types** both define data structures, but they shine in different scenarios.
 
-interface Admin extends Agent {
-  role: string;
-}
-```
-Types, on the other hand, use intersection types (&) to combine existing types. This approach is more flexible when composing complex types or working with non-object structures.
+### Key Differences at a Glance 🔍
 
-```
-type Agent = {
-  name: string;
-  age: number;
-};
+| Feature                | Interface                          | Type                          |
+|------------------------|------------------------------------|-------------------------------|
+| **Best For**           | Object shapes & class contracts    | Unions, tuples, complex types |
+| **Extending**          | `extends` keyword                  | `&` intersection              |
+| **Declaration Merging**| ✅ Multiple declarations merge     | ❌ Single declaration only    |
+| **Primitive Types**    | ❌                                 | ✅ Works with strings/numbers |
 
-type Admin = Agent & {
-  role: string;
-};
-```
-2. Declaration Merging
-A unique feature of interface is declaration merging. You can declare an interface multiple times, and TypeScript will automatically merge the definitions:
+### When Would I Use Which? 🤔
 
-```
+**Choose Interface When:**
+- Defining object structures for APIs/classes
+- Want future extensibility
+```typescript
 interface User {
+  id: string;
   name: string;
 }
 
-interface User {
-  age: number;
+interface AdminUser extends User {
+  permissions: string[];
 }
 
-// Result: { name: string; age: number }
-```
+Choose Type When:
 
-In contrast, type does not support merging. Declaring the same type alias more than once results in a compilation error:
+    Creating union/intersection types
 
-```
-type User = {
-  name: string;
-};
+    Working with non-object data
 
-type User = {
-  age: number;
-}; // Error: Duplicate identifier 'User'
-```
 
-Use Case
+type ID = string | number;
+type Coordinate = [number, number];
 
-<table border="1" cellpadding="8" cellspacing="0">
-  <thead>
-    <tr>
-      <th>Feature</th>
-      <th>interface</th>
-      <th>type</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>Object structure</td>
-      <td>Best suited</td>
-      <td>Also valid</td>
-    </tr>
-    <tr>
-      <td>Class implementation</td>
-      <td>Ideal for class contracts</td>
-      <td>Not used with <code>implements</code></td>
-    </tr>
-    <tr>
-      <td>Primitive types</td>
-      <td>Not supported</td>
-      <td>Works with strings, numbers, etc.</td>
-    </tr>
-    <tr>
-      <td>Unions & Tuples</td>
-      <td>Workarounds needed</td>
-      <td>Native support</td>
-    </tr>
-    <tr>
-      <td>Declaration merging</td>
-      <td>Supported</td>
-      <td>Not supported</td>
-    </tr>
-    <tr>
-      <td>Extensibility</td>
-      <td>Via <code>extends</code></td>
-      <td>Via <code>&</code> (intersection types)</td>
-    </tr>
-  </tbody>
-</table>
+The keyof Keyword <a name="the-keyof-keyword"></a>
+Your Type-Safe Key Accessor 🔑
 
-4. When to Use interface vs type
-There’s no strict rule, but some general guidance includes:
+What It Does:
+Creates a union type of an object's keys.
 
-Use interface when:
-
-Defining object shapes or class contracts
-
-You want to allow declaration merging or plan to extend it later
-
-Working in large codebases where extension and maintenance are key
-
-Use type when:
-
-Defining unions, intersections, or tuples
-
-Creating advanced or flexible types that go beyond just object shapes
-
-Working with primitive types or creating mapped/conditional types
-
-## 2. What is the use of the keyof keyword in TypeScript? Provide an example.
-If you're new to TypeScript, you might have come across the keyof keyword and wondered what it does. Let me explain it to you in simple terms.
-
-What is keyof?
-In TypeScript, keyof is used to get the type of the keys of an object. It returns a union type of all the keys in a given type, making your code safer and more flexible.
-
-How Does keyof Work?
-Let’s say you have an interface Person:
-
-```
-interface Person {
-  name: string;
-  age: number;
-}
-```
-
-```
-type PersonKeys = keyof Person; // "name" | "age"
-In this case, keyof Person will give you a union type of the keys—"name" and "age".
-```
-Real-World Example: Dynamic Key Access
-You can use keyof to create functions that dynamically access object properties, ensuring type safety:
-
-```
 interface Product {
   id: number;
   name: string;
+  price: number;
 }
 
-function getProperty<T>(obj: T, key: keyof T) {
-  return obj[key];
+type ProductKeys = keyof Product; // "id" | "name" | "price"
+
+Real-World Usage 💼
+
+Dynamic Property Access:
+
+function getProductValue(product: Product, key: keyof Product) {
+  return product[key]; // Type-safe access!
 }
 
-const product = { id: 1, name: "Laptop" };
-console.log(getProperty(product, "name")); // Output: "Laptop"
-```
-Here, the key parameter is guaranteed to be a valid key of Product, so you can't accidentally pass an invalid property.
+//  Works
+getProductValue({id: 1, name: "Chair", price: 49}, "name");
 
-Conclusion
-The keyof keyword in TypeScript helps you work with object keys in a type-safe way, making your code more reliable and easier to maintain. It ensures that you can only access valid keys from an object, preventing runtime errors.
+//  Error: "discount" isn't a valid key
+getProductValue({id: 2, name: "Desk", price: 199}, "discount");
+
+Autocomplete Bonus:
+IDEs provide suggestions for valid keys!
