@@ -83,6 +83,7 @@ function getMostExpensiveProduct(products: Product[]): Product | null {
     return products.reduce((previous, current) => current.price > previous.price ? current : previous, products[0]);
 }
 
+
 const products = [
     { name: "Pen", price: 10 },
     { name: "Notebook", price: 25 },
@@ -107,8 +108,7 @@ function getDayType(day: Day): string {
         day === Day.Tuesday ||
         day === Day.Wednesday ||
         day == Day.Thursday ||
-        day === Day.Friday ||
-        day === Day.Saturday) {
+        day === Day.Friday) {
         return 'Weekday';
     } else {
         return 'Weekend';
@@ -119,6 +119,7 @@ function getDayType(day: Day): string {
 console.log(getDayType(Day.Monday));   // Output: "Weekday"
 console.log(getDayType(Day.Sunday));   // Output: "Weekend"
 console.log(getDayType(Day.Saturday));   // Output: "Weekday"
+console.log(getDayType(Day.Wednesday));   // Output: "Weekday"
 
 
 async function squareAsync(n: number): Promise<number> {
