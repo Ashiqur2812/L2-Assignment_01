@@ -136,6 +136,6 @@ async function squareAsync(n: number): Promise<number> {
 squareAsync(4).then(console.log);       
 squareAsync(-3).catch(console.error);  
 
-// this is typescript assignment 
+
 
 
