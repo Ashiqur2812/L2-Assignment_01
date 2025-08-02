@@ -137,7 +137,7 @@ squareAsync(4).then(console.log);
 squareAsync(-3).catch(console.error);  
 
 // this is typescript code
-
+// i am learning typescript 
 
 
 
